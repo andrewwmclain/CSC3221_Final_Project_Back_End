@@ -6,8 +6,9 @@ var logger = require('morgan');
 
 var db = require('./database'); // Connect to the database
 
+var booksRouter = require('./routes/books'); // Load the router of friends
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// var usersRouter = require('./routes/users');
 
 var app = express();
 
@@ -22,8 +23,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-var booksRouter = require('./routes/books'); // Load the router of friends
+// app.use('/users', usersRouter);
+app.use('/api/books', booksRouter); // Use that router using /api/books
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
