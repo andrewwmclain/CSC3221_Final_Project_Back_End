@@ -23,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+var booksRouter = require('./routes/books'); // Load the router of friends
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
