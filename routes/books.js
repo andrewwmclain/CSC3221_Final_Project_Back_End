@@ -49,6 +49,9 @@ router.post('/', (request, response, next) => {
 });
 
 router.get('/', (request, response, next) => {
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
     let author = request.query['author'];
     if (author){
         BookSchema
@@ -89,6 +92,9 @@ router.get('/', (request, response, next) => {
 // });
 
 router.get('/:isbn', (request, response, next) =>{
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
     BookSchema
         .find({"ISBN": request.params.isbn}, (error, result) =>{
             if (error) {
@@ -128,6 +134,9 @@ router.get('/:isbn', (request, response, next) =>{
 // });
 
 router.patch('/:isbn', (request, response, next) =>{
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
     BookSchema
         .findOne({"ISBN": request.params.isbn}, (error, result)=>{
             if (error) {
@@ -154,6 +163,9 @@ router.patch('/:isbn', (request, response, next) =>{
 });
 
 router.delete('/:isbn', (request, response, next) =>{
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
     BookSchema
         .findOne({"ISBN": request.params.isbn}, (error, result)=>{
             if (error) {
