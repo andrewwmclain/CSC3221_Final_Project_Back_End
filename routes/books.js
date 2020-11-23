@@ -17,8 +17,18 @@ function HandleError(response, reason, message, code){
 
 
 router.post('/', (request, response, next) => {
-    let newBook = request.body;
-    console.log(request.body);
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+    let obj = JSON.parse(JSON.stringify(request.body));
+
+    // let newBook = request.body;
+    // console.log(request.body);
+
+    let newBook = obj;
+    console.log(newBook);
+
+    // console.log("hi!");
     if (!newBook.Name || !newBook.Author || !newBook.ISBN || !newBook.Price){
         HandleError(response, 'Missing Info', 'Form data missing', 500);
     }else{
