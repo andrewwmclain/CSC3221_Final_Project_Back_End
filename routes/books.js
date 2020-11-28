@@ -32,19 +32,40 @@ router.post('/', (request, response, next) => {
     if (!newBook.Name || !newBook.Author || !newBook.ISBN || !newBook.Price){
         HandleError(response, 'Missing Info', 'Form data missing', 500);
     }else{
-        let book = new BookSchema({
-            Name: newBook.Name,
-            Author: newBook.Author,
-            ISBN: newBook.ISBN,
-            Price: newBook.Price
-        });
-        book.save((error) => {
-            if (error){
-                response.send({"error": error});
-            }else{
-                response.send({"id": book.id});
-            }
-        });
+        // var re = /^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$/;
+
+        // var re = /^(97(8|9))?\d{9}(\d|X)$/;
+        // var re2 = new RegExp('' +
+        //     /^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|/ +
+        //     /(?=(?:[0-9]+[- ]){3})/.source +
+        //     /[- 0-9X]{13}$|97[89][0-9]{10}$|/.source +
+        //     /(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$/.source
+        // );
+
+        // var match = re.exec(newBook.ISBN);
+        // var re = /^(?:ISBN(?:-13)?:?\ )?(?=[0-9]{13}$|(?=(?:[0-9]+[-\ ]){4})[-\ 0-9]{17}$)97[89][-\ ]?[0-9]{1,5}[-\ ]?[0-9]+[-\ ]?[0-9]+[-\ ]?[0-9]$/;
+
+        var re = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
+
+        var match = re.exec(newBook.ISBN);
+
+        if(match.length == 0){
+            HandleError(response, 'Invalid ISBN', 'ISBN format is invalid', 500);
+        }else{
+            let book = new BookSchema({
+                Name: newBook.Name,
+                Author: newBook.Author,
+                ISBN: newBook.ISBN,
+                Price: newBook.Price
+            });
+            book.save((error) => {
+                if (error){
+                    response.send({"error": error});
+                }else{
+                    response.send({"id": book.id});
+                }
+            });
+        }
     }
 });
 
