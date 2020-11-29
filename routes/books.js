@@ -150,13 +150,17 @@ router.patch('/:isbn', (request, response, next) =>{
             .findOne({"ISBN": request.params.isbn}, (error, result) => {
                 if (error) {
                     response.status(500).send(error);
-                    console.log("test error");
+                    // console.log("test error");
                 } else if (result) {
                     if (request.body.isbn) {
                         delete request.body.isbn;
                     }
                     for (let field in request.body) {
-                        result[field] = request.body[field];
+                        if(!request.body[field] || request.body[field].length == 0){
+                            HandleError(response, 'Missing field', 'One or more fields is missing', 500);
+                        }else{
+                            result[field] = request.body[field];
+                        }
                     }
                     result.save((error, friend) => {
                         if (error) {
