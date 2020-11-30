@@ -27,19 +27,42 @@ router.post('/', (request, response, next) => {
         if(!match){
             HandleError(response, 'Invalid ISBN', 'ISBN format is invalid', 500);
         }else{
-            let book = new BookSchema({
-                Name: newBook.Name,
-                Author: newBook.Author,
-                ISBN: newBook.ISBN,
-                Price: newBook.Price
-            });
-            book.save((error) => {
+            BookSchema.find
+                .exec( (error, books) => {
                 if (error){
-                    response.send({"error": error});
                 }else{
-                    response.send({"id": book.id});
+                   if(books.length > 0){
+                       HandleError(response, 'ISBN taken', 'ISBN already exists', 500);
+                   }else{
+                       let book = new BookSchema({
+                           Name: newBook.Name,
+                           Author: newBook.Author,
+                           ISBN: newBook.ISBN,
+                           Price: newBook.Price
+                       });
+                       book.save((error) => {
+                           if (error){
+                               response.send({"error": error});
+                           }else{
+                               response.send({"id": book.id});
+                           }
+                       });
+                   }
                 }
             });
+            // let book = new BookSchema({
+            //     Name: newBook.Name,
+            //     Author: newBook.Author,
+            //     ISBN: newBook.ISBN,
+            //     Price: newBook.Price
+            // });
+            // book.save((error) => {
+            //     if (error){
+            //         response.send({"error": error});
+            //     }else{
+            //         response.send({"id": book.id});
+            //     }
+            // });
         }
     }
 });
